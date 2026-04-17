@@ -66,10 +66,14 @@ def train(df: pd.DataFrame):
     rf_auc = roc_auc_score(y_test, rf_pipeline.predict_proba(X_test)[:, 1])
     lr_auc = roc_auc_score(y_test, lr_pipeline.predict_proba(X_test)[:, 1])
 
-    best = rf_pipeline if rf_auc >= lr_auc else lr_pipeline
-    best_auc = max(rf_auc, lr_auc)
+    # Always prefer RF: SHAP TreeExplainer requires a tree-based model.
+    # LR is trained for comparison only; RF is used for deployment.
+    best = rf_pipeline
+    best_auc = rf_auc
     best_acc = accuracy_score(y_test, best.predict(X_test))
-    best_name = "RandomForest" if rf_auc >= lr_auc else "LogisticRegression"
+    best_name = "RandomForest"
+    if lr_auc > rf_auc:
+        print(f"NOTE: LR outperformed RF ({lr_auc:.4f} vs {rf_auc:.4f}) but RF is used for SHAP compatibility.")
 
     print(f"RandomForest  ROC-AUC: {rf_auc:.4f}")
     print(f"LogisticRegression ROC-AUC: {lr_auc:.4f}")
@@ -80,6 +84,8 @@ def train(df: pd.DataFrame):
 
 
 if __name__ == "__main__":
+    version = VERSION_PATH.read_text().strip()
+    print(f"Training model {version}")
     df = load_data()
     pipeline, feature_names = train(df)
 
