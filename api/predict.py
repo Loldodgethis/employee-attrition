@@ -56,9 +56,15 @@ def predict(data: dict) -> dict:
 
     transformed = pipeline.named_steps["preprocessor"].transform(df)
     raw_shap = explainer.shap_values(transformed)
-    # RandomForest returns list [class0, class1]; handle both shapes
+    # SHAP return shape varies by version:
+    # list of 2 arrays (old): [class0(n,f), class1(n,f)] → use [1][0]
+    # 3D array (new):         (n, f, 2)                  → use [0, :, 1]
+    # 2D array (single out):  (n, f)                     → use [0]
+    import numpy as np
     if isinstance(raw_shap, list):
         sv = raw_shap[1][0]
+    elif hasattr(raw_shap, 'ndim') and raw_shap.ndim == 3:
+        sv = raw_shap[0, :, 1]
     else:
         sv = raw_shap[0]
 
