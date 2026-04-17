@@ -1,7 +1,5 @@
 # ML artifacts
 ml/data/
-ml/model.pkl
-ml/feature_names.json
 ml/venv/
 __pycache__/
 *.pyc
