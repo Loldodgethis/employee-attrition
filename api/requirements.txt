@@ -5,7 +5,7 @@ shap==0.45.1
 joblib==1.4.2
 numpy==1.26.4
 pandas==2.2.2
-psycopg2-binary==2.9.10
+psycopg2-binary==2.9.9
 python-dotenv==1.0.1
 gunicorn==22.0.0
 pytest==8.2.0
