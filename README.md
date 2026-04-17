@@ -2,8 +2,7 @@
 
 Predict whether an employee will leave using machine learning. Built end-to-end: data → model → API → frontend → database.
 
-**Live:** [https://employee-attrition.vercel.app](https://employee-attrition.vercel.app) *(update after deployment)*
-
+**Live:** [[https://employee-attrition.vercel.app](https://employee-attrition-eight.vercel.app/)]
 ## Architecture
 
 ```
